@@ -38,6 +38,10 @@ cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
      password=firegex
  fi
 
+# download tcp dumper
+wxho "Download TCP Dumper"
+wget https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/dump.sh
+chmod +x dump.sh
 
 echo "Starting the proxy"
 python3 firegex.py -p $port -P $password
