@@ -11,6 +11,9 @@
 # install python3 and tmux
 echo "Installing python3 and tmux"
 sudo apt install python3 tmux -y
+# sudo pacman -S python3 tmux --noconfirm
+# sudo dnf install -y python3 tmux 
+
 
 #  start download the proxy file
 echo "Downloading the proxy file"
@@ -25,6 +28,10 @@ cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
 
 
 # choose proxy port
+
+echo "Ports in use by other services"
+sudo lsof -i -P -n | grep LISTEN
+
  echo "Choose a port for the proxy (default 4444):"
  read port
  if [ -z "$port" ]; then
@@ -32,10 +39,10 @@ cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
  fi
 
 # choose proxy password
- echo "Choose a password for the proxy (default firegex):"
+ echo "Choose a password for the proxy (default unito_team):"
  read password
  if [ -z "$password" ]; then
-     password=firegex
+     password=unito_team
  fi
 
 # download tcp dumper
