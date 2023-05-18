@@ -29,9 +29,9 @@ curl https://raw.githubusercontent.com/Pwnzer0tt1/firegex/main/start.py -o fireg
 
 # GENERAZIONE CHIAVE SSH DA SISTEMARE
 
-ssh-keygen -t rsa -b 4096 -C "firegex" -f ~/.ssh/id_rsa -q -N ""
-# save the public key in the local file
-cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
+# ssh-keygen -t rsa -b 4096 -C "firegex" -f ~/.ssh/id_rsa -q -N ""
+# # save the public key in the local file
+# cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
 
 
 # choose proxy port
@@ -46,16 +46,19 @@ sudo lsof -i -P -n | grep LISTEN
  fi
 
 # choose proxy password
- echo "Choose a password for the proxy (default unito_team):"
- read password
- if [ -z "$password" ]; then
-     password=unito_team
- fi
+# echo "Choose a password for the proxy (default unito_team):"
+# read password
+# if [ -z "$password" ]; then
+#     password=unito_team
+# fi
 
 # download tcp dumper
 wxho "Download TCP Dumper"
 wget https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/dump.sh
 chmod +x dump.sh
 
-echo "Starting the proxy"
-python3 firegex.py -p $port
+echo "start firegex_handler and pass firegex path"
+path=$(realpath firegex.py)
+python3 viregex.py -p $port 
+
+
