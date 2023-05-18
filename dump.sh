@@ -50,9 +50,14 @@ fi
 # start dump and upload 
 while true
 do
-    timeout 240 --foreground tcpdump -i any -w ${dir}CTF_dump_$i.pcap port not 22 
+    timeout 30 tcpdump -i any -w ${dir}CTF_dump_$i.pcap port not 22 
     # curl -F "file=@${dir}CTF_dump_$i.pcap" http://$ip:5000/upload -u "tulip:$pass"
     i=$((i+1))
     echo "Dump $i done"
-    sleep 5
+        if i > 30 ; then
+        echo "Delete old files"
+        rm ${dir}CTF_dump_*
+    fi
+    echo "Sleep 2"
+    sleep 2
 done
