@@ -8,11 +8,18 @@
 # 5. Avvio del proxy
 #"""
 
+
+# check sudo 
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 # install python3 and tmux
 echo "Installing python3 and tmux"
-sudo apt install python3 tmux -y
-# sudo pacman -S python3 tmux --noconfirm
-# sudo dnf install -y python3 tmux 
+apt install python3 tmux -y
+# pacman -S python3 tmux --noconfirm
+# dnf install -y python3 tmux 
 
 
 #  start download the proxy file
@@ -51,4 +58,4 @@ wget https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/dump.sh
 chmod +x dump.sh
 
 echo "Starting the proxy"
-python3 firegex.py -p $port -P $password
+python3 firegex.py -p $port
