@@ -15,3 +15,4 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/AlessandroMIlani/ctf_scr
 
 - Tulip: https://github.com/AlessandroMIlani/tulip
 - Destructive Farm: https://github.com/DestructiveVoice/DestructiveFarm 
+- Proxy, to be chosen: https://github.com/Pwnzer0tt1/firegex OR https://github.com/ByteLeMani/ctf_proxy
