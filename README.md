@@ -1,15 +1,9 @@
 # ctf_scripts
 
 
-## Vuln_scripts
+## Vuln
 
-scripts to use on CTF
-
-Autostart software deploy on the vulnbox
-
-```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/start.sh)"
-```
+scripts to use on CTF, to run on the vulnbox
 
 # Other Tools
 
