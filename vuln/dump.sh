@@ -39,6 +39,7 @@ fi
 
 
 i=1
+j=1
 # check if exist files on format CTF_dump_*.pcap
 if [ "$(ls -A $dir) | grep CTF_dump" ]; then
     i=$(ls -A $dir | grep CTF_dump | tail -n 1 | cut -d'_' -f3 | cut -d'.' -f1)
@@ -50,14 +51,16 @@ fi
 # start dump and upload 
 while true
 do
-    timeout 30 tcpdump -i any -w ${dir}CTF_dump_$i.pcap port not 22 
+    timeout 120 tcpdump -i game -w ${dir}CTF_dump_$i.pcap port not 22 
     # curl -F "file=@${dir}CTF_dump_$i.pcap" http://$ip:5000/upload -u "tulip:$pass"
     i=$((i+1))
-    echo "Dump $i done"
-        if i > 30 ; then
-        echo "Delete old files"
-        rm ${dir}CTF_dump_*
-    fi
+    # j=$((j+1))
+    # echo "Dump $i done"
+    #     if j > 30 ; then
+    #     echo "Delete older files"
+    #     # delete 25 older files
+    #     ls -t $dir | tail -n +25 | xargs rm --
+    # fi
     echo "Sleep 2"
     sleep 2
 done
