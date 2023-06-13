@@ -13,5 +13,5 @@ Cyclic dump of the Network traffic and send to tulip
 Autostart software deploy on the vulnbox
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/start.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/vuln/start.sh)"
 ```
