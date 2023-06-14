@@ -18,8 +18,12 @@ git clone https://github.com/ByteLeMani/ctf_proxy
 
 
 # download tcp dumper
-wxho "Download TCP Dumper"
-wget https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/dump.sh
+echo "Download TCP Dumper"
+wget https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/vuln/dump.sh
 chmod +x dump.sh
+
+echo "Download the proxy helper"
+wget https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/vuln/proxy_helper.py
+python3 proxy_helper.py
 
 
