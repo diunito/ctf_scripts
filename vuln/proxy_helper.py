@@ -1,101 +1,109 @@
-import os
-import yaml
+import docker
 import json
 import requests
+import os
+import glob
 
-# check folder in current directory
-def check_folder():
-    # get current directory
-    current_dir = os.getcwd()
-    # get list of files and folders in current directory
-    folders = []
-    for entry in os.scandir(current_dir):
-        if entry.is_dir() and not entry.name.startswith('.'):
-            folders.append(entry.name)
-    return folders
+def get_container_info():
+    names = {}
+    client = docker.from_env()
+    containers = client.containers.list()
+    for container in containers:
+        ports = container.ports
+        name = container.name
+        if ports:
+            for port in ports:
+                # Stampa il nome del container e la porta mappata sull'host
+                print(f"Container: {name}, Port: {port}")
+                # dictionary name, port list
+                if name not in names:
+                    names[name] = []
+                    names[name].append(port[:-4])
+                else:
+                    names[name].append(port[:-4])
+    return names
 
-
-def check_docker_compose(folder):
-    ports = []
-    # chek docker-compose.yml in folder
-    if 'docker-compose.yml' in os.listdir(folder) or 'docker-compose.yaml' in os.listdir(folder):
-        if 'docker-compose.yml' in os.listdir(folder):
-            fil = 'docker-compose.yml'
-        else:
-            fil = 'docker-compose.yaml'
-        # parse docker-compose.yml
-        with open(folder + "/" + fil) as file:
-            compose_data = yaml.safe_load(file)
-            for service_name, service_data in compose_data.get('services', {}).items():
-                service_ports = service_data.get('ports', [])
-                for port in service_ports:
-                    if isinstance(port, str):
-                # Se la porta è specificata come stringa nel formato 'host:container'
-                # chek if formait is "ip:hostPort:containerPort"
-                        if len(port.split(':')) == 3:
-                            host_port = port.split(':')[1]
-                            ports.append(int(host_port))
-                        else:
-                            host_port, _ = port.split(':')
-                            ports.append(int(host_port))
-                    elif isinstance(port, int):
-                # Se la porta è specificata come intero
-                        ports.append(port)
-    else:
-        # print scan dir result
-        print(folder + ' not have docker-compose.yml')
-        print(os.listdir(folder))
-        return "Nop"
-    
-    ports_str = ','.join(map(str, ports))
-    #print(ports_str)
-    return ports_str
-
-def create_json(port, list_dir):
+def create_json(containers):
     services = []
-    for i in range(len(port)):
+    for container in containers:
         service = {
-            "name": list_dir[i],
-            "target_ip": list_dir[i],
-            "target_port": port[i],
-            "listen_port": port[i]
-        }
-        
+            "name": container,
+            "target_ip": container,
+            "target_port": int(containers[container][0]) + 1,
+            "listen_port": int(containers[container][0])
+        }            
         # if localhost:port retrun an http response add http = True
         try:
-            r = requests.get('http://localhost:' + str(port[i]))
+            r = requests.get('http://localhost:' + str(containers[container]))
             if r.status_code == 200:
-                service['http'] = "true"
+                service['http'] = True
         except:
-            pass
+            service['http'] = False
         services.append(service)
     
-    data = {
-        "services": services
+    glbal_conf = {
+        "keyword": "EH! VOLEVI",
+        "verbose": False,
+        "dos": {
+            "enabled": False,
+            "duration": 60,
+            "interval": 2
+        },
+        "max_stored_messages": 10,
+        "max_message_size": 65535
     }
     
-    return data                
+    data = {
+        "services": services,
+        "global_config": glbal_conf
+    } 
+
+    return data  
 
 
-def main():
-    # get list of files and folders in current directory
-    list_dir = check_folder()
-    # check if folder exist
-    if 'ctf_proxy' in list_dir:
-        #remove folder from list
-        list_dir.remove('ctf_proxy')
-    port = []
-    print(list_dir)
-    for folder in list_dir:
-        port.append(check_docker_compose(folder))
-    print(port)
-        
-    data = create_json(port, list_dir)
+def edit_compose(main_folder, containers):
+    print()
+    compose_files = glob.glob(os.path.join(main_folder, '**/docker-compose.yml'), recursive=True) + \
+               glob.glob(os.path.join(main_folder, '**/docker-compose.yaml'), recursive=True)
+    text_to_add = '''
+
+networks:
+  default:
+    name: ctf_network
+    external: true'''
+
+    for compose_file in compose_files:
+        with open(compose_file, 'a') as file:
+            file.write(text_to_add)
+
+    for conteiner in containers:
+        #search containers[conteiner][0] in compose_files
+        for compose_file in compose_files:
+            with open(compose_file, 'r') as file:
+                lines = file.readlines()
+                for i in range(len(lines)):
+                    if containers[conteiner][0] in lines[i]:
+                        port = int(containers[conteiner][0]) + 1
+                        # copy line until -
+                        space = lines[i].split('-')[0]
+                        lines[i] = space + '- "' + str(port) +'"'
+                        with open(compose_file, 'w') as file2:
+                            file2.writelines(lines)
+                        break  
+                
+
+
+    return 0
+
+if __name__ == "__main__":
+
+    containers = get_container_info() 
+    data = create_json(containers)
     json_data = json.dumps(data, indent=4)
-    
-    with open('config.json', 'w') as outfile:
+    with open('./ctf_proxy/proxy/config/config.json', 'w') as outfile:
         outfile.write(json_data)
-        
-if __name__ == '__main__':
-    main()
-    
+    # get curret folder
+    main_folder = os.getcwd()
+    #print(main_folder)
+    res = edit_compose(main_folder, containers)
+    #print(res)
