@@ -6,12 +6,17 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-# install python3 and tmux
-echo "Installing python3 and tmux"
-apt install python3 tmux -y
+# install python3, pip and tmux
+echo "Installing python3, pip and tmux"
+apt install python3 tmux python3-pip -y
 # pacman -S python3 tmux --noconfirm
 # dnf install -y python3 tmux 
 
+# install python packages
+echo "Installing python packages"
+pip3 install requests 
+pip3 install docker
+pip3 install json
 
 echo "Downloading the proxy"
 git clone https://github.com/ByteLeMani/ctf_proxy
