@@ -65,6 +65,7 @@ def edit_compose(main_folder, containers):
     print()
     compose_files = glob.glob(os.path.join(main_folder, '**/docker-compose.yml'), recursive=True) + \
                glob.glob(os.path.join(main_folder, '**/docker-compose.yaml'), recursive=True)
+    compose_files = [x for x in compose_files if 'ctf_proxy' not in x]
     text_to_add = '''
 
 networks:
