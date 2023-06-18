@@ -3,11 +3,11 @@
 
 ## Vuln
 
-scripts to use on CTF, to run on the vulnbox
+scripts to run on the vulnbox
 
-## tulip_companion
+## User
 
-alternative to dump.sh to download pcap from vulnbox 
+scirpt to run on your own Pc
 
 # Other Tools
 
