@@ -1,21 +1,22 @@
 #!/bin/bash
 
-
-trap ctrl_c INT
-
-function ctrl_c() {
-	echo " "
-        echo "** Trapped ctrl C"
-	echo "** Kill All"
-	exit
-}
-
 # check sudo
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
 
+interrupt_handler() {
+    echo "Interruzione ricevuta. Terminazione in corso..."
+    # Puoi aggiungere eventuali azioni di pulizia o altre operazioni qui, se necessario.
+    # Ad esempio, puoi terminare il processo tcpdump usando il suo PID (se disponibile).
+    if [[ -n $tcpdump_pid ]]; then
+        kill $tcpdump_pid
+    fi
+    exit 1
+}
+
+trap interrupt_handler SIGINT
 
 # check args
 if [ $# -ne 3 ];
@@ -51,16 +52,11 @@ fi
 # start dump and upload 
 while true
 do
-    timeout 120 tcpdump -i game -w ${dir}CTF_dump_$i.pcap port not 22 
+    echo "Dumping $i"
+    timeout 120 tcpdump -i any -w ${dir}CTF_dump_$i.pcap port not 22 &
+    tcpdump_pid=$!
+    wait $tcpdump_pid
     # curl -F "file=@${dir}CTF_dump_$i.pcap" http://$ip:5000/upload -u "tulip:$pass"
     i=$((i+1))
-    # j=$((j+1))
-    # echo "Dump $i done"
-    #     if j > 30 ; then
-    #     echo "Delete older files"
-    #     # delete 25 older files
-    #     ls -t $dir | tail -n +25 | xargs rm --
-    # fi
-    echo "Sleep 2"
     sleep 2
 done

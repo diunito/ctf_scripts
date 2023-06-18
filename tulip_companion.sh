@@ -2,17 +2,17 @@
 
 # get the tulip folder
 
-#read -p "Insert the tulip folder path: " path
-path="/home/ale/CTF/tool/tulip/pcaps"
+if [ $# -ne 3 ];
+  then
+    echo "No arguments supplied"
+    echo "Usage: ./tulip_companion.sh <vuln_box_ip> <vuln_box_password> <tulip_pcap_folder_path>"
 
-#read -p "Insert vuln ip: " ip
-ip="10.60.41.1"
-
-#read -p "Insert vuln passwd: " REPLY
-REPLY="AeM0i4ZNtLljgIXp"
+ip=$1
+PSWD=$2
+path=$3
 
 # evry 2 minutes download folder from vuln
 while true; do
-    sshpass -p $REPLY scp -r root@$ip:/tmp/pcap $path
+    sshpass -p $PSWD rsync -r root@$ip:/tmp/pcap/\* $path
     sleep 120
 done
