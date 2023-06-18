@@ -9,6 +9,9 @@ Auto download some utils
 # dump.sh
 Cyclic dump of the Network traffic and send to tulip
 
+# proxy_helper.py
+Script that parses running dockers and goes to modify their comopse file to suit execution under ctf_proxy
+
 ## one command
 Autostart software deploy on the vulnbox
 
