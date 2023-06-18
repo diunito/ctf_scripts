@@ -1,10 +1,10 @@
 
 ## start.sh
 Auto download some utils
-- proxy
 - tmux
 - python3
-- dump.sh
+- proxy & proxy_helper
+- dump script
 
 # dump.sh
 Cyclic dump of the Network traffic and send to tulip
