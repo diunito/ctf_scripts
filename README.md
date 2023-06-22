@@ -11,7 +11,7 @@ scirpt to run on your own Pc
 
 # Other Tools
 
-- Tulip: https://github.com/AlessandroMIlani/tulip
-- Destructive Farm: https://github.com/DestructiveVoice/DestructiveFarm 
-- Proxy: https://github.com/ByteLeMani/ctf_proxy
+- [Tulip](https://github.com/AlessandroMIlani/tulip)
+- [Destructive Farm](https://github.com/AlessandroMIlani/DestructiveFarm)
+- [Proxy](https://github.com/ByteLeMani/ctf_proxy)
 
