@@ -8,6 +8,8 @@ import yaml
 
 # global array with services json
 services = []
+all_ports = []
+
 logging.basicConfig(level=logging.INFO, filename="proxy_helper.logs", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
 
@@ -24,7 +26,6 @@ def compose_backup(compose_file):
 def create_service(dock, ports):
     i = 0
     for port in ports:
-        print("using port: " + port)
         service = {
                 "name": dock + '_' + str(i),
                 "target_ip": dock,
@@ -40,9 +41,7 @@ def create_service(dock, ports):
         except Exception as e:
             logging.error(e)
             service['http'] = False
-        print(service)
         services.append(service)
-        print(services)
         logging.info('[+] Added service: ' + dock + " - port: " + port + ' to config.json') 
     pass
    
@@ -82,9 +81,10 @@ def get_docker_services(folders):
                     for i in range(len(ports)):
                         if len(ports[i].split(':')) > 2:
                             clean_ports.append(ports[i].split(':')[1])
+                            all_ports.append(ports[i].split(':')[1])
                         else:
                             clean_ports.append(ports[i].split(':')[0])
-                    print(clean_ports, type(clean_ports))
+                            all_ports.append(ports[i].split(':')[0])
                     create_service(service, clean_ports)
                 except Exception as err:  
                     logging.error(err)
@@ -128,7 +128,7 @@ def change_ports(compose):
                         clean_ports.append(ports[i].split(':')[1])
                     else:
                         clean_ports.append(ports[i].split(':')[0])
-                #print(clean_ports)
+                
                 for i in range(len(clean_ports)):
                     clean_ports[i] = str(int(clean_ports[i]) + 1)
                 docker_config['services'][service]['ports'] = clean_ports
@@ -149,6 +149,28 @@ def edit_compose(folder):
     
     logging.info('[+] Finished editing docker-compose.yml files')
 
+def update_proxy_compose(fodler):
+    logging.info('[+] Start editing docker-compose.yml file for proxy')
+    with open('./ctf_proxy/docker-compose.yml', 'r') as file:
+        docker_config = yaml.load(file, Loader=yaml.FullLoader)
+        # edit ports of service proxy
+        re_port = []
+        for port in all_ports:
+            re_port.append(port + ':' + port)
+        # add port 80 and 443 if not present
+        if '80:80' not in re_port:
+            re_port.append('80:80')
+        if '443:443' not in re_port:
+            re_port.append('443:443')
+        docker_config['services']['proxy']['ports'] = re_port
+        # update file
+    with open('./ctf_proxy/docker-compose.yml', 'w') as file:
+        yaml.dump(docker_config, file, default_flow_style=False)
+    logging.info('[+] Finished editing docker-compose.yml file for proxy')
+        
+        
+
+
 if __name__ == "__main__":
     
     # start logging namee file logfile+timestamp
@@ -156,7 +178,6 @@ if __name__ == "__main__":
     
     # get all subfolders
     subfolders = [f.path for f in os.scandir('.') if f.is_dir() ]
-    #print(subfolders)
     logging.info('[+] Get all subfolders')
     # remove all folders that start with .
     subfolders = [x for x in subfolders if not x.startswith('./.')]
@@ -176,4 +197,6 @@ if __name__ == "__main__":
 
     ## edit docker-compose.yml files
     main_folder = os.getcwd()
-    edit_compose(main_folder)
+    #edit_compose(main_folder)
+    
+    update_proxy_compose(main_folder)
