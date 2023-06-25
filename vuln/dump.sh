@@ -18,19 +18,23 @@ interrupt_handler() {
 
 trap interrupt_handler SIGINT
 
-# check args
-if [ $# -ne 3 ];
+# check args < 1
+if [ $# -lt 1 ];
   then
     echo "No arguments supplied"
-    echo "Usage: ./dump.sh <dir> <tulip_server_ip> <tulip_server_password>"
+    echo "Usage: ./dump.sh <dir>" 
+    echo "or"
+    echo "Usage: ./dump.sh <dir> <tulip_ip> <tulip_password>"
     exit
 fi
 
-
 dir=$1
-ip=$2
-pass=$3
 
+if [ $# -eq 3 ];
+  then
+    ip=$2
+    pass=$3
+fi
 
 # check if dir exist
 if [ ! -d "$dir" ]; then
@@ -56,7 +60,11 @@ do
     timeout 120 tcpdump -i game -w ${dir}CTF_dump_$i.pcap port not 22 &
     tcpdump_pid=$!
     wait $tcpdump_pid
-    # curl -F "file=@${dir}CTF_dump_$i.pcap" http://$ip:5000/upload -u "tulip:$pass"
+    if [ $# -eq 3 ];
+      then
+        echo "Uploading $i"
+        curl -F "file=@${dir}CTF_dump_$i.pcap" http://$ip:5000/upload -u "tulip:$pass"
+    fi
     i=$((i+1))
     sleep 2
 done
