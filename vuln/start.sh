@@ -17,6 +17,9 @@ echo "                                                                          
 echo "                                                                                       \|__|\|__|";
 echo "                                                                                                 ";
 
+echo "backing services"
+cp -r . ./old
+
 # install python3, pip and tmux
 echo "Installing python3, pip and tmux"
 apt install python3 tmux python3-pip -y
