@@ -24,7 +24,7 @@ if [ "$1" == "--help" ]; then
   echo "Usage: ./start.sh <dir>  -- For execute only the tcpdump"
   echo "Usage: ./start.sh <dir> <tulip_ip> <tulip_password> -- For execute the tcpdump and send the pcap to the tulip server"
   echo "PS: recommended folder: /tmp/pcaps/" 
-  exit
+  exit 1
 fi
 
 
@@ -41,7 +41,7 @@ interrupt_handler() {
 trap interrupt_handler SIGINT
 
 # check args < 1
-if [ $# -lt 1 ];
+if [ $# -lt 1 ]
   then
     echo "No arguments supplied"
     echo "Usage: ./dump.sh <dir>" 
@@ -52,14 +52,15 @@ fi
 
 dir=$1
 
-if [ $# -eq 3 ];
+if [ $# -eq 3 ]
   then
     ip=$2
     pass=$3
 fi
 
 # check if dir exist
-if [ ! -d "$dir" ]; then
+if [ ! -d "$dir" ] 
+  then
     echo "Folder $dir does not exist"
     mkdir $1
 fi
@@ -68,7 +69,8 @@ fi
 i=1
 j=1
 # check if exist files on format CTF_dump_*.pcap
-if [ "$(ls -A $dir) | grep CTF_dump" ]; then
+if [ "$(ls -A $dir) | grep CTF_dump" ]
+  then
     i=$(ls -A $dir | grep CTF_final | tail -n 1 | cut -d'_' -f3 | cut -d'.' -f1)
     echo "Last dump file: $i"
     i=$((i+1))
@@ -82,7 +84,7 @@ do
     timeout 120 tcpdump -i game -w ${dir}CTF_final_$i.pcap port not 22 &
     tcpdump_pid=$!
     wait $tcpdump_pid
-    if [ $# -eq 3 ];
+    if [ $# -eq 3 ]
       then
         echo "Uploading $i"
         curl -F "file=@${dir}CTF_final_$i.pcap" http://$ip:5000/upload -u "tulip:$pass"

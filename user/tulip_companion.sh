@@ -17,6 +17,7 @@ if [$# -ne 3]
   then
     echo "No arguments supplied"
     echo "Usage: ./tulip_companion.sh <vuln_box_ip> <vuln_box_password> <tulip_pcap_folder_path>"
+    exit 1
 fi
 
 ip=$1

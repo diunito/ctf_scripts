@@ -141,6 +141,7 @@ def edit_compose(folder):
     logging.info('[+] Start editing docker-compose.yml files')
     compose_files = glob.glob(os.path.join(folder, '**/docker-compose.yml'), recursive=True)
     compose_files = [x for x in compose_files if 'ctf_proxy' not in x]
+    compose_files = [x for x in compose_files if 'old' not in x]
     
     for compose_file in compose_files:
         compose_backup(compose_file)
@@ -201,6 +202,7 @@ if __name__ == "__main__":
     subfolders = [x for x in subfolders if not x.startswith('./.')]
     # remove all folders that end with ctf_proxy
     subfolders = [x for x in subfolders if not x.endswith('ctf_proxy')]
+    subfolders = [x for x in subfolders if 'old' not in x]
 
     data = get_docker_services(subfolders)
     
