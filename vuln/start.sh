@@ -17,7 +17,7 @@ echo "                                                                          
 echo "                                                                                       \|__|\|__|";
 echo "                                                                                                 ";
 
-echo "backing services"
+echo "BackUP services"
 cp -r . ./old
 
 # install python3, pip and tmux
@@ -34,7 +34,6 @@ pip3 install json
 
 echo "Downloading the proxy"
 git clone https://github.com/ByteLeMani/ctf_proxy
-
 
 # download tcp dumper
 echo "Download TCP Dumper"
