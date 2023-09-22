@@ -21,8 +21,8 @@ echo "                                                                          
 # check --help
 if [ "$1" == "--help" ]; then
   echo "Tool to automate the execution of tcpdump and optionally send them to a tulip server"
-  echo "Usage: ./start.sh <dir>  -- For execute only the tcpdump"
-  echo "Usage: ./start.sh <dir> <tulip_ip> <tulip_password> -- For execute the tcpdump and send the pcap to the tulip server"
+  echo "Usage: ./dump.sh <dir>  -- For execute only the tcpdump"
+  echo "Usage: ./dump.sh <dir> <tulip_ip> <tulip_password> -- For execute the tcpdump and send the pcap to the tulip server"
   echo "PS: recommended folder: /tmp/pcaps/" 
   exit 1
 fi
