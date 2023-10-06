@@ -35,8 +35,8 @@ pip3 install json
 echo "Downloading the proxy"
 git clone https://github.com/ByteLeMani/ctf_proxy
 
-# download tcp dumper
-echo "Download TCP Dumper"
+# download pcap dumper
+echo "Download pcap Dumper"
 wget https://raw.githubusercontent.com/AlessandroMIlani/ctf_scripts/main/vuln/dump.sh
 chmod +x dump.sh
 
