@@ -71,7 +71,7 @@ j=1
 # check if exist files on format CTF_dump_*.pcap
 if [ "$(ls -A $dir) | grep CTF_dump" ]
   then
-    i=$(ls -A $dir | grep CTF_final | tail -n 1 | cut -d'_' -f3 | cut -d'.' -f1)
+    i=$(ls -A $dir | grep CTF_dump | tail -n 1 | cut -d'_' -f3 | cut -d'.' -f1)
     echo "Last dump file: $i"
     i=$((i+1))
     echo "Continue from $i"
@@ -81,7 +81,7 @@ fi
 while true
 do
     echo "Dumping $i"
-    timeout 120 tcpdump -i game -w ${dir}CTF_final_$i.pcap port not 22 &
+    timeout 120 tcpdump -i game -w ${dir}CTF_dump_$i.pcap port not 22 &
     tcpdump_pid=$!
     wait $tcpdump_pid
     if [ $# -eq 3 ]
