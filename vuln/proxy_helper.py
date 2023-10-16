@@ -6,7 +6,7 @@ import glob
 import logging
 import yaml
 
-# global array with services json
+# global array with services yml
 services = []
 all_ports = []
 
@@ -69,9 +69,7 @@ def get_docker_services(folders):
         with open(folder + '/docker-compose.yml', 'r') as file:
             docker_config = yaml.load(file, Loader=yaml.FullLoader)
             # get all services names
-            services_names = docker_config['services'].keys()
-            # convert to list 
-            services_names = list(services_names)
+            services_names = list(docker_config['services'].keys())
             # get all ports for each service
             for service in services_names:
                 # get ports
@@ -93,7 +91,7 @@ def get_docker_services(folders):
 def create_json():
     glbal_conf = {
         
-        "keyword": "EH! VOLEVI",
+        "keyword": "BLOCKED",
         "verbose": False,
         "dos": {
             "enabled": False,
