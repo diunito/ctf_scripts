@@ -112,7 +112,7 @@ def create_json():
     return json.dumps(data, indent=4)    
 
 
-def change_ports(compose):
+def remove_ports(compose):
     with open(compose, 'r') as file:
         docker_config = yaml.load(file, Loader=yaml.FullLoader)
         # get services names
@@ -121,18 +121,9 @@ def change_ports(compose):
         services_names = list(services_names)
         for service in services_names:
             try:
-                ports = docker_config['services'][service]['ports']
-                clean_ports = []
-                for i in range(len(ports)):
-                    if len(ports[i].split(':')) > 2:
-                        clean_ports.append(ports[i].split(':')[2])
-                    else:
-                        clean_ports.append(ports[i].split(':')[1])
-                
-                for i in range(len(clean_ports)):
-                    clean_ports[i] = str(int(clean_ports[i]))
-                docker_config['services'][service]['ports'] = clean_ports
-            except:
+                del docker_config['services'][service]['ports']
+            except Exception as err:
+                logging.error(err)
                 pass
     with open(compose, 'w') as file:
         yaml.dump(docker_config, file, default_flow_style=False)
@@ -145,7 +136,7 @@ def edit_compose(folder):
     
     for compose_file in compose_files:
         compose_backup(compose_file)
-        change_ports(compose_file)
+        remove_ports(compose_file)
         add_network(compose_file)
     
     logging.info('[+] Finished editing docker-compose.yml files')
@@ -217,6 +208,6 @@ if __name__ == "__main__":
 
     ## edit docker-compose.yml files
     main_folder = os.getcwd()
-    #edit_compose(main_folder)
+    edit_compose(main_folder)
     
     update_proxy_compose(main_folder)
