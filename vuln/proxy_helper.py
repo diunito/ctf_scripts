@@ -23,26 +23,25 @@ def compose_backup(compose_file):
     logging.info('[+] Created backup for docker-compose.yml file')
 
 
-def create_service(dock, ports):
+def create_service(dock, host, serv):
     i = 0
-    for port in ports:
+    for i in range(len(host)):
         service = {
                 "name": dock + '_' + str(i),
                 "target_ip": dock,
-                "target_port": int(port) + 1,
-                "listen_port": int(port)
+                "target_port": int(serv[i]),
+                "listen_port": int(host[i])
             }
-        i+=1
         try:
-            r = requests.get('http://localhost:' + str(port))
-            logging.info('[+] http://localhost:' + str(port) + ' status code:' + str(r.status_code))
+            r = requests.get('http://localhost:' + str(host[i]))
+            logging.info('[+] http://localhost:' + str(host[i]) + ' status code:' + str(r.status_code))
             if r.status_code == 200:
                 service['http'] = True
         except Exception as e:
             logging.error(e)
             service['http'] = False
         services.append(service)
-        logging.info('[+] Added service: ' + dock + " - port: " + port + ' to config.json') 
+        logging.info('[+] Added service: ' + dock + " - port: " + host[i] + ' to config.json') 
     pass
    
    
@@ -75,15 +74,18 @@ def get_docker_services(folders):
                 # get ports
                 try:
                     ports = docker_config['services'][service]['ports']
-                    clean_ports = []
+                    ser_ports = []
+                    host_ports = []
                     for i in range(len(ports)):
                         if len(ports[i].split(':')) > 2:
-                            clean_ports.append(ports[i].split(':')[1])
+                            host_ports.append(ports[i].split(':')[1])
+                            ser_ports.append(ports[i].split(':')[2])
                             all_ports.append(ports[i].split(':')[1])
                         else:
-                            clean_ports.append(ports[i].split(':')[0])
+                            host_ports.append(ports[i].split(':')[0])
+                            ser_ports.append(ports[i].split(':')[1])
                             all_ports.append(ports[i].split(':')[0])
-                    create_service(service, clean_ports)
+                    create_service(service, host_ports, ser_ports)
                 except Exception as err:  
                     logging.error(err)
                     pass        
@@ -123,12 +125,12 @@ def change_ports(compose):
                 clean_ports = []
                 for i in range(len(ports)):
                     if len(ports[i].split(':')) > 2:
-                        clean_ports.append(ports[i].split(':')[1])
+                        clean_ports.append(ports[i].split(':')[2])
                     else:
-                        clean_ports.append(ports[i].split(':')[0])
+                        clean_ports.append(ports[i].split(':')[1])
                 
                 for i in range(len(clean_ports)):
-                    clean_ports[i] = str(int(clean_ports[i]) + 1)
+                    clean_ports[i] = str(int(clean_ports[i]))
                 docker_config['services'][service]['ports'] = clean_ports
             except:
                 pass
