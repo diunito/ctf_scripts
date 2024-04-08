@@ -81,7 +81,7 @@ fi
 while true
 do
     echo "Dumping $i"
-    timeout 120 tcpdump -i game -w ${dir}CTF_dump_$i.pcap port not 22 &
+    timeout 120 tcpdump -i game -w ${dir}/CTF_dump_$i.pcap port not 22 &
     tcpdump_pid=$!
     wait $tcpdump_pid
     if [ $# -eq 3 ]
