@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ -z "$1" ] && echo "need ip as first arg" && exit 1
+
 ip="$1"
 user="${2:-root}"
 port="${3:-22}"
