@@ -1,6 +1,12 @@
 #!/bin/false
 import os
 import requests
+# use
+#
+# sys.path.append('path/to/this/script/parent/folder')
+# from getidflags import *
+#
+# to import this script
 
 def getidflags(serv, team, dry=False):
     # for ip and port set 'SYSTEM_ID_FLAGS_IP' and 'SYSTEM_ID_FLAGS_PORT' in DestructiveFarm's config.py

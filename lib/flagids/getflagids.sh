@@ -1,4 +1,5 @@
 #!/bin/false
+# to use this script just source it
 getflagids() {
 	[[ "$#" -lt 2 ]] \
 		&& echo "Usage: $0 [service name] [team ip]" \
