@@ -8,7 +8,7 @@ import requests
 #
 # to import this script
 
-def getidflags(serv, team, dry=False):
+def getflagids(serv, team, dry=False):
     # for ip and port set 'SYSTEM_ID_FLAGS_IP' and 'SYSTEM_ID_FLAGS_PORT' in DestructiveFarm's config.py
     # they will be set automatically by (our) start_sploit.py
     # set them manually (or use the default values) for use not with (our) DestructiveFarm
