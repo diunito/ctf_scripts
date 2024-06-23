@@ -30,10 +30,11 @@ This feature helps in distinguishing your requests from others, making it easier
 
 ## Getting Started
 
-Here's a quick example to get you started using the *ADsession*:
+1. Set the `PYTHONPATH` environment variable to the parent folder of this folder
+2. Here's a quick example to get you started using the *ADsession*:
 
 ```python
-from MarkedRequests.MarkedRequests import ADsession
+from MarkedRequests import ADsession
 
 # Initialize your session
 session = ADsession(vulnbox_ip='192.168.0.1')  # Replace with your vulnbox IP

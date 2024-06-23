@@ -1,10 +1,10 @@
 #!/bin/false
 import os
 import requests
-# use
+# set PYTHONPATH to the folder before this one
+# and import with
 #
-# sys.path.append('path/to/this/script/parent/folder')
-# from getidflags import *
+# import flagids
 #
 # to import this script
 
