@@ -2,7 +2,7 @@
 # to use this script just source it
 getflagids() {
 	[[ "$#" -lt 2 ]] \
-		&& echo "Usage: $0 [service name] [team ip]" \
+		&& echo "Usage: $0 [service name] [team ip]" >&2 \
 		&& return 1
 
 	if [ "$3" = "-d" ];then
@@ -28,15 +28,15 @@ getflagids() {
 	# tput setaf 3: yellow (or cyan) (`man terminfo`)
 	# tput sgr0: reset https://stackoverflow.com/a/73483287/12206923
 	if [ -z "$IDFIP" ];then
-		echo $(tput setaf 3)WARN: \$IDFIP not set, using default $ip$(tput sgr0)
+		echo $(tput setaf 3)WARN: \$IDFIP not set, using default $ip$(tput sgr0) >&2
 	fi
 	if [ -z "$IDFPORT" ];then
-		echo $(tput setaf 3)WARN: \$IDFPORT not set, using default $port$(tput sgr0)
+		echo $(tput setaf 3)WARN: \$IDFPORT not set, using default $port$(tput sgr0) >&2
 	fi
 
 	url="http://$ip:$port/flagIds\?service\=$service\&team\=$team"
 	if [ "$dry" -eq 1 ];then
-		echo $url
+		echo $url >&2
 	else
 		# json will be printed to stdout, use jq or whatever to process it
 		curl $url | jq --arg k "$service" --arg k2 "$team" '.[$k][$k2]' -c
