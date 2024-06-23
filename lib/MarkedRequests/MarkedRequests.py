@@ -12,7 +12,7 @@ class _HeaderUpdateMixin:
     """Mixin to add specific headers if the hostname matches the vulnbox IP."""
 
     def __init__(self, vulnbox_ip: str | None = os.getenv('VM_IP', __INVALID_IP)):
-        self.__vulnbox_ip = urlparse(vulnbox_ip).hostname
+        self.__vulnbox_ip = vulnbox_ip
 
     def update_headers(self, url, headers):
         """Update headers if the hostname matches the vulnbox IP."""

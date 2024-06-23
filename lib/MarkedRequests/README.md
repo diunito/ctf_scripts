@@ -33,7 +33,7 @@ This feature helps in distinguishing your requests from others, making it easier
 Here's a quick example to get you started using the *ADsession*:
 
 ```python
-from MarkedRequests import ADsession
+from MarkedRequests.MarkedRequests import ADsession
 
 # Initialize your session
 session = ADsession(vulnbox_ip='192.168.0.1')  # Replace with your vulnbox IP
