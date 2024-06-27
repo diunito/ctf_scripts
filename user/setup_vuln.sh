@@ -1,16 +1,18 @@
 #!/bin/bash
-
-[ -z "$1" ] && echo "need ip as first arg" && exit 1
 ssh -G '*' | grep 'controlmaster false' && echo "you should probably enable a ControlMaster in your ssh config"
 
-ip="$1"
-user="${2:-root}"
-port="${3:-22}"
+set -a
+DOTPATH="../../priv"
+. ../../priv/sh_env
+set +a
+
+ip="$VM_IP"
+user="${VM_USER:-root}"
+port="${VM_PORT:-22}"
 ssh_folder_path="$HOME/.ssh"
 key_name="vulnbox"
 
-sp='sshpass -eSSHPASS'
-export SSHPASS="$(<../../priv/.vm-pass)"
+sp='sshpass -eVM_PASS'
 
 home_folder=$($sp ssh -p "$port" "${user}@${ip}" 'echo $HOME')
 if [ "$?" -ne 0 ];then
