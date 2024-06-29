@@ -30,6 +30,9 @@ echo "$ssh_conf" | $sp ssh -p $port "${user}@${ip}" 'cat - >> $HOME/.ssh/config;
 
 $sp ssh -p "$port" "${user}@${ip}" 'echo alias gserve="''\"git init; git add -A; git -c user.name=team41 -c user.email=vulnbox@team41.ccit commit -m first\"" >> $HOME/.bash_profile'
 
+#$sp ssh -p "$port" "${user}@${ip}" 'cd $HOME; source .bash_profile; for folder in *; do cd "$folder"; gserve; cd ..; done'
+$sp ssh -p "$port" "${user}@${ip}"
+
 $sp ssh -p "$port" "${user}@${ip}" 'ssh-keyscan github.com >> $HOME/.ssh/known_hosts; cd $HOME;curl -sL https://raw.githubusercontent.com/koraynilay/simad/main/deploy_clone.sh -o deploy_clone.sh; chmod +x deploy_clone.sh; ./deploy_clone.sh; tmux ls'
 
 $sp ssh-copy-id -p "$port" "${user}@${ip}"
