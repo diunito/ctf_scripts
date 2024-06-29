@@ -35,4 +35,4 @@ $sp ssh -p "$port" "${user}@${ip}"
 
 $sp ssh -p "$port" "${user}@${ip}" 'ssh-keyscan github.com >> $HOME/.ssh/known_hosts; cd $HOME;curl -sL https://raw.githubusercontent.com/koraynilay/simad/main/deploy_clone.sh -o deploy_clone.sh; chmod +x deploy_clone.sh; ./deploy_clone.sh; tmux ls'
 
-$sp ssh-copy-id -p "$port" "${user}@${ip}"
+$sp ssh-copy-id -p "$port" "${user}@${ip}" -i "${ssh_folder_path}/${key_name}"
