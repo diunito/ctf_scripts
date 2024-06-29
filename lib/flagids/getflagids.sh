@@ -34,9 +34,9 @@ getflagids() {
 		echo $(tput setaf 3)WARN: \$IDFPORT not set, using default $port$(tput sgr0) >&2
 	fi
 
-	url=http://$ip:$port/flagIds\?service\=$service\&team\=$team
+	url=http://"$ip":"$port"/flagIds\?service\="$service"\&team\="$team"
 	if [ "$dry" -eq 1 ];then
-		echo $url >&2
+		echo "$url" >&2
 	else
 		# json will be printed to stdout, use jq or whatever to process it
 		data=$(curl $url)
