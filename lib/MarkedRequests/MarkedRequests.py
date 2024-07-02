@@ -5,13 +5,13 @@ import requests
 
 
 _HEADER_MARKER = {"Skibidi": "toilet"}
+_INVALID_IP = "-1.-1.-1.-1"
 
 
 class _HeaderUpdateMixin:
-    __INVALID_IP = "-1.-1.-1.-1"
     """Mixin to add specific headers if the hostname matches the vulnbox IP."""
 
-    def __init__(self, vulnbox_ip: str | None = os.getenv('VM_IP', __INVALID_IP)):
+    def __init__(self, vulnbox_ip: str | None = os.getenv('VM_IP', _INVALID_IP)):
         self.__vulnbox_ip = vulnbox_ip
 
     def update_headers(self, url, headers):
@@ -23,7 +23,7 @@ class _HeaderUpdateMixin:
 
 
 class ADsession(requests.Session, _HeaderUpdateMixin):
-    def __init__(self, vulnbox_ip: str | None = os.getenv('VM_IP', __INVALID_IP)):
+    def __init__(self, vulnbox_ip: str | None = os.getenv('VM_IP', _INVALID_IP)):
         requests.Session.__init__(self)
         _HeaderUpdateMixin.__init__(self, vulnbox_ip)
 
@@ -37,7 +37,7 @@ class ADsession(requests.Session, _HeaderUpdateMixin):
 
 
 class ADrequests(_HeaderUpdateMixin):
-    def __init__(self, vulnbox_ip: str | None = os.getenv('VM_IP', __INVALID_IP)):
+    def __init__(self, vulnbox_ip: str | None = os.getenv('VM_IP', _INVALID_IP)):
         super().__init__(vulnbox_ip)
 
     def get(self, url, params=None, headers=None, **kwargs):
