@@ -28,7 +28,7 @@ ssh_conf="Host github.com
   User git"
 echo "$ssh_conf" | $sp ssh -p $port "${user}@${ip}" 'cat - >> $HOME/.ssh/config; cat $HOME/.ssh/config'
 
-$sp ssh -p "$port" "${user}@${ip}" 'echo alias gserve="''\"git init; git add -A; git -c user.name=team41 -c user.email=vulnbox@team41.ccit commit -m first\"" >> $HOME/.bash_profile'
+$sp ssh -p "$port" "${user}@${ip}" 'echo alias gserve="''\"git init; git add -A; git -c user.name=teamunito -c user.email=vulnbox@teamunito.ccit commit -m first\"" >> $HOME/.bash_profile'
 
 #$sp ssh -p "$port" "${user}@${ip}" 'cd $HOME; source .bash_profile; for folder in *; do cd "$folder"; gserve; cd ..; done'
 $sp ssh -p "$port" "${user}@${ip}"
