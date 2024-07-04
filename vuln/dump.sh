@@ -85,6 +85,7 @@ do
     echo "Dumping $i"
     fn="${dir}/${prefix}_$i.pcap"
     timeout 120 tcpdump -i game -w "$fn" port not 22 &
+    timeout 120 ssldump -k ~/CCalendar/frontend/nginx/key.pem -i game -dnq port 8443 -w "$fn"
     tcpdump_pid=$!
     wait $tcpdump_pid
     if [ $# -eq 3 ]

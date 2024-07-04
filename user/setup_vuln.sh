@@ -1,5 +1,6 @@
 #!/bin/bash
 ssh -G '*' | grep 'controlmaster false' && echo "you should probably enable a ControlMaster in your ssh config"
+set -x
 
 set -a
 DOTPATH="../../priv"
@@ -30,6 +31,7 @@ echo "$ssh_conf" | $sp ssh -p $port "${user}@${ip}" 'cat - >> $HOME/.ssh/config;
 
 $sp ssh -p "$port" "${user}@${ip}" 'echo alias gserve="''\"git init; git add -A; git -c user.name=teamunito -c user.email=vulnbox@teamunito.ccit commit -m first\"" >> $HOME/.bash_profile'
 $sp ssh -p "$port" "${user}@${ip}" 'echo alias gcom="''\"git add -A; git -c user.name=teamunito -c user.email=vulnbox@teamunito.ccit commit -m patch\"" >> $HOME/.bash_profile'
+$sp ssh -p "$port" "${user}@${ip}" 'echo alias dcr="''\"docker compose up -d --build --remove-oprhans\"" >> $HOME/.bash_profile'
 
 #$sp ssh -p "$port" "${user}@${ip}" 'cd $HOME; source .bash_profile; for folder in *; do cd "$folder"; gserve; cd ..; done'
 echo 'init git repos (with `gserve`) for the services now'
@@ -37,4 +39,4 @@ $sp ssh -p "$port" "${user}@${ip}"
 
 $sp ssh -p "$port" "${user}@${ip}" 'ssh-keyscan github.com >> $HOME/.ssh/known_hosts; cd $HOME;curl -sL https://raw.githubusercontent.com/koraynilay/simad/main/deploy_clone.sh -o deploy_clone.sh; chmod +x deploy_clone.sh; ./deploy_clone.sh; tmux ls'
 
-$sp ssh-copy-id -p "$port" "${user}@${ip}" -i "${ssh_folder_path}/${key_name}"
+$sp ssh-copy-id -p "$port"  -i "${ssh_folder_path}/${key_name}" "${user}@${ip}"
