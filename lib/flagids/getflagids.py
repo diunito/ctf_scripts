@@ -14,6 +14,7 @@ def getflagids(serv, team, dry=False):
     # set them manually (or use the default values) for use not with (our) DestructiveFarm
     ip = os.getenv("IDFIP", "10.10.0.1")
     port = os.getenv("IDFPORT", "8081")
+    team = team.split('.')[-2]
 
     # no yellow highlighting because python sucks more than twin-turbo (and import termcolor may not work)
     if os.getenv("IDFIP") is None:
@@ -27,4 +28,6 @@ def getflagids(serv, team, dry=False):
     else:
         response = requests.get(url)
         # returns a dictionary
-        return response.json()[serv][team]
+        r = response.json()[serv][team]
+        ids = [value for value in r.values()]
+        return ids
